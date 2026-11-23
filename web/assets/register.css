@@ -1,0 +1,111 @@
+/* Register-specific layout: an eleven-column statutory table, the continuity
+   banner, the H1 warning and the page breaks of the printable register. */
+
+.mono { font-family: var(--mono); }
+.help { font-size: .85rem; color: var(--ink-3); margin: 0 0 14px; }
+
+/* continuity banner */
+.banner {
+  margin: 20px 0 0;
+  padding: 12px 14px;
+  border: 1px solid var(--line);
+  border-left: 3px solid var(--ink-3);
+  border-radius: 8px;
+  background: var(--surface-2);
+  font-size: .9rem;
+  color: var(--ink-2);
+}
+.banner.ok { border-left-color: var(--ok); }
+.banner.bad {
+  border-left-color: var(--bad);
+  border-color: color-mix(in srgb, var(--bad) 40%, var(--line));
+  background: color-mix(in srgb, var(--bad) 9%, var(--surface));
+  color: var(--ink);
+  font-weight: 600;
+}
+
+/* section switcher */
+.views { margin: 18px 0 0; }
+
+/* On a phone, two inputs side by side leave neither wide enough to read a
+   date or an address in, so the pairs stack. */
+@media (max-width: 520px) {
+  .row2 { grid-template-columns: 1fr; }
+}
+
+/* Schedule H1 warning under the drug name */
+.h1flag { margin: 7px 0 0; font-size: .85rem; min-height: 1.2em; color: var(--ink-3); }
+.h1flag.hit { color: var(--warn); font-weight: 600; }
+
+/* form messages and the fields a refused entry marks */
+.formmsg { margin: 14px 0 0; font-size: .88rem; min-height: 1.2em; color: var(--ink-2); }
+.formmsg.bad { color: var(--bad); font-weight: 600; }
+.formmsg.ok { color: var(--ok); font-weight: 600; }
+input.missing { border-color: var(--bad); outline: 2px solid color-mix(in srgb, var(--bad) 45%, transparent); outline-offset: 1px; }
+
+/* register table */
+/* A grid item sizes to its content by default, so an eleven-column table would
+   push the card past the page. min-width:0 lets the wrapper scroll instead. */
+.cols > section.card { min-width: 0; }
+.tablewrap { overflow-x: auto; }
+table.reg { width: 100%; border-collapse: collapse; font-size: .82rem; }
+table.reg th, table.reg td {
+  text-align: left;
+  vertical-align: top;
+  padding: 6px 8px;
+  border-bottom: 1px solid var(--line);
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+table.reg thead th {
+  font-size: .72rem;
+  text-transform: uppercase;
+  letter-spacing: .03em;
+  color: var(--ink-3);
+  border-bottom: 2px solid var(--line-2);
+  white-space: nowrap;
+}
+table.reg td.num, table.reg th.num { font-family: var(--mono); font-variant-numeric: tabular-nums; }
+table.reg tbody tr:hover { background: var(--surface-2); }
+.tag-keep { color: var(--ok); font-weight: 600; white-space: nowrap; }
+.tag-drop { color: var(--ink-3); white-space: nowrap; }
+.tag-h1 {
+  font-family: var(--mono);
+  font-size: .68rem;
+  padding: 2px 6px;
+  border-radius: 999px;
+  border: 1px solid color-mix(in srgb, var(--tool) 35%, var(--line));
+  color: var(--tool);
+  white-space: nowrap;
+}
+
+/* molecule chips */
+.chips { list-style: none; display: flex; flex-wrap: wrap; gap: 6px; padding: 0; margin: 14px 0 0; }
+.chips li { display: flex; align-items: center; gap: 6px; font-family: var(--mono); font-size: .74rem; padding: 3px 4px 3px 9px; border: 1px solid var(--line); border-radius: 999px; background: var(--surface-2); color: var(--ink-2); }
+.chips button { font: inherit; font-size: .8rem; line-height: 1; cursor: pointer; border: none; background: none; color: var(--ink-3); padding: 2px 5px; border-radius: 999px; }
+.chips button:hover { color: var(--bad); background: var(--surface); }
+
+/* printable bound-register pages */
+.regpage { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 18px; margin: 0 0 18px; }
+.regpage-head { display: flex; flex-wrap: wrap; gap: 4px 18px; justify-content: space-between; border-bottom: 2px solid var(--line-2); padding-bottom: 10px; margin-bottom: 12px; }
+.regpage-head h3 { margin: 0; font-size: 1rem; }
+.regpage-head .meta { font-family: var(--mono); font-size: .72rem; color: var(--ink-3); text-align: right; }
+.regpage-head .lic { font-size: .8rem; color: var(--ink-2); }
+.regpage table.reg { font-size: .7rem; }
+.regpage table.reg th, .regpage table.reg td { padding: 4px 5px; border-bottom: 1px solid var(--line-2); }
+.regpage-foot { margin: 10px 0 0; font-size: .72rem; color: var(--ink-3); display: flex; justify-content: space-between; gap: 18px; flex-wrap: wrap; }
+
+@media print {
+  .noprint { display: none !important; }
+  .banner { display: none; }
+  body { background: #fff; color: #000; }
+  .wrap { max-width: none; padding: 0; }
+  .regpage { border: none; border-radius: 0; padding: 0; margin: 0; break-after: page; page-break-after: always; }
+  .regpage:last-child { break-after: auto; page-break-after: auto; }
+  .regpage table.reg { font-size: 8pt; }
+  .regpage table.reg th, .regpage table.reg td { border-bottom: 1px solid #999; }
+  .regpage table.reg tbody tr { break-inside: avoid; page-break-inside: avoid; }
+  .tablewrap { overflow: visible; }
+}
+
+@page { margin: 12mm; }

@@ -1,0 +1,291 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'self'; img-src 'self' data:; style-src 'self'; script-src 'self'; font-src 'self'; form-action 'self'">
+  <title>Schedule H1 drug sale register for retail pharmacies · Open MSME</title>
+  <meta name="description" content="Keep the separate Schedule H1 sale register on your own machine: guided entries that cannot be left half-filled, a serial-continuity check, three-year retention status and a printable register for inspection.">
+  <meta name="color-scheme" content="light dark">
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="assets/style.css">
+  <link rel="stylesheet" href="assets/accent.css">
+  <link rel="stylesheet" href="assets/register.css">
+  <script src="assets/theme-init.js"></script>
+</head>
+<body>
+  <header class="topbar noprint">
+    <div class="wrap">
+      <a class="brand" href="https://sreenivas-sadhu-prabhakara.github.io/openmsme/">
+        <span class="dot"></span><b>Open MSME</b><span class="tag">Schedule H1 register</span>
+      </a>
+      <span class="sp"></span>
+      <a class="home" href="https://sreenivas-sadhu-prabhakara.github.io/openmsme/">All tools</a>
+      <button class="themer" data-themer type="button">Theme</button>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero noprint">
+      <div class="wrap">
+        <div class="eyebrow">Healthcare SMEs · India</div>
+        <h1>Schedule H1 drug sale register for retail pharmacies</h1>
+        <p class="lede">Record every Schedule H1 supply against its prescription, with the full statutory column set, unbroken serial numbers and three-year retention worked out for each line. Everything stays on this computer.</p>
+        <div class="who">
+          <span class="pill">Retail chemists and hospital pharmacies</span>
+          <span class="pill reg">Drugs &amp; Cosmetics Rules · Schedule H1 · Rule 65(11A)</span>
+        </div>
+      </div>
+    </section>
+
+    <div class="wrap">
+      <p id="banner" class="banner" role="status" aria-live="polite">Loading the register&hellip;</p>
+
+      <nav class="seg views noprint" aria-label="Sections">
+        <button type="button" data-view="entry" aria-pressed="true">New entry</button>
+        <button type="button" data-view="register" aria-pressed="false">Register</button>
+        <button type="button" data-view="print" aria-pressed="false">Printable register</button>
+        <button type="button" data-view="setup" aria-pressed="false">Pharmacy &amp; H1 list</button>
+      </nav>
+    </div>
+
+    <!-- ---------------------------------------------------- new entry -->
+    <div class="wrap" id="view-entry">
+      <div class="cols">
+        <section class="card">
+          <h2>New entry — serial <span id="next-serial" class="mono">&mdash;</span></h2>
+          <p class="help">Every column below is required. The entry is refused until all of it is there, and the message names each column still blank.</p>
+
+          <!-- novalidate: the browser stops at the first empty input, one bubble
+               at a time. The register's own check names every blank column at
+               once, which is what a pharmacist needs to go and fetch. -->
+          <form id="entry-form" autocomplete="off" novalidate>
+            <div class="row2">
+              <div class="field">
+                <label for="f-dateOfSupply">Date of supply</label>
+                <input type="date" id="f-dateOfSupply" name="dateOfSupply" required>
+              </div>
+              <div class="field">
+                <label for="f-quantity">Quantity supplied <span class="hint">with the unit</span></label>
+                <input type="text" id="f-quantity" name="quantity" placeholder="10 tablets" required>
+              </div>
+            </div>
+
+            <div class="field">
+              <label for="f-drugName">Name of the drug <span class="hint">brand or molecule, with strength</span></label>
+              <input type="text" id="f-drugName" name="drugName" placeholder="Levofloxacin 500 mg tablet" required>
+              <p id="h1-flag" class="h1flag" role="status" aria-live="polite"></p>
+            </div>
+
+            <div class="row2">
+              <div class="field">
+                <label for="f-manufacturer">Manufacturer</label>
+                <input type="text" id="f-manufacturer" name="manufacturer" required>
+              </div>
+              <div class="field">
+                <label for="f-batchNo">Batch number</label>
+                <input type="text" id="f-batchNo" name="batchNo" required>
+              </div>
+            </div>
+
+            <div class="row2">
+              <div class="field">
+                <label for="f-prescriberName">Name of the prescriber</label>
+                <input type="text" id="f-prescriberName" name="prescriberName" placeholder="Dr A Nair" required>
+              </div>
+              <div class="field">
+                <label for="f-prescriberRegNo">Registration number of the prescriber</label>
+                <input type="text" id="f-prescriberRegNo" name="prescriberRegNo" placeholder="KMC/41287" required>
+              </div>
+            </div>
+
+            <div class="field">
+              <label for="f-patientName">Name of the patient</label>
+              <input type="text" id="f-patientName" name="patientName" required>
+            </div>
+
+            <div class="field">
+              <label for="f-patientAddress">Address of the patient</label>
+              <input type="text" id="f-patientAddress" name="patientAddress" required>
+            </div>
+
+            <div class="row2">
+              <div class="field">
+                <label for="f-pharmacistName">Name of the dispensing pharmacist</label>
+                <input type="text" id="f-pharmacistName" name="pharmacistName" required>
+              </div>
+              <div class="field">
+                <label for="f-notes">Note <span class="hint">optional</span></label>
+                <input type="text" id="f-notes" name="notes" placeholder="e.g. prescription retained, copy no. 14">
+              </div>
+            </div>
+
+            <p id="entry-msg" class="formmsg" role="alert" aria-live="assertive"></p>
+
+            <div class="btnrow">
+              <button type="submit" class="btn primary">Write this line to the register</button>
+              <button type="button" class="btn ghost" id="undo-last">Remove the last line</button>
+            </div>
+          </form>
+        </section>
+      </div>
+    </div>
+
+    <!-- ----------------------------------------------------- register -->
+    <div class="wrap" id="view-register" hidden>
+      <div class="cols">
+        <section class="card">
+          <h2>Register</h2>
+          <form id="filter-form" autocomplete="off">
+            <div class="row2">
+              <div class="field">
+                <label for="q-drug">Drug</label>
+                <input type="text" id="q-drug" name="drug">
+              </div>
+              <div class="field">
+                <label for="q-batch">Batch number</label>
+                <input type="text" id="q-batch" name="batch">
+              </div>
+            </div>
+            <div class="row2">
+              <div class="field">
+                <label for="q-patient">Patient</label>
+                <input type="text" id="q-patient" name="patient">
+              </div>
+              <div class="field">
+                <label for="q-prescriber">Prescriber <span class="hint">name or registration number</span></label>
+                <input type="text" id="q-prescriber" name="prescriber">
+              </div>
+            </div>
+            <div class="row2">
+              <div class="field">
+                <label for="q-from">Supplied on or after</label>
+                <input type="date" id="q-from" name="from">
+              </div>
+              <div class="field">
+                <label for="q-to">Supplied on or before</label>
+                <input type="date" id="q-to" name="to">
+              </div>
+            </div>
+            <div class="btnrow">
+              <button type="submit" class="btn primary">Search</button>
+              <button type="button" class="btn ghost" id="filter-clear">Clear</button>
+              <a class="btn ghost" id="export-csv" href="/api/export.csv" download>Export CSV</a>
+            </div>
+          </form>
+
+          <p id="register-count" class="help"></p>
+          <div class="tablewrap">
+            <table class="reg" id="register-table">
+              <thead id="register-head"></thead>
+              <tbody id="register-body"></tbody>
+            </table>
+          </div>
+          <p id="register-empty" class="help" hidden>No entries match.</p>
+        </section>
+      </div>
+    </div>
+
+    <!-- ------------------------------------------------- print view -->
+    <div class="wrap" id="view-print" hidden>
+      <section class="card noprint">
+        <h2>Printable register</h2>
+        <p class="help">The statutory column order, broken into pages for inspection. Set a date range in the Register section first to print one period; the range is printed in the page heading.</p>
+        <div class="row2">
+          <div class="field">
+            <label for="rows-per-page">Lines per page</label>
+            <input type="number" id="rows-per-page" min="1" max="200" step="1" value="15">
+          </div>
+          <div class="field">
+            <label for="print-range">Period being printed</label>
+            <input type="text" id="print-range" readonly>
+          </div>
+        </div>
+        <div class="btnrow">
+          <button type="button" class="btn primary" id="do-print">Print</button>
+        </div>
+      </section>
+      <div id="printable"></div>
+    </div>
+
+    <!-- -------------------------------------------- pharmacy and list -->
+    <div class="wrap" id="view-setup" hidden>
+      <div class="cols">
+        <section class="card">
+          <h2>Pharmacy details</h2>
+          <p class="help">Printed at the head of every register page so a page handed to an inspector identifies the licensee.</p>
+          <form id="pharmacy-form" autocomplete="off">
+            <div class="field">
+              <label for="p-name">Pharmacy name</label>
+              <input type="text" id="p-name" name="name">
+            </div>
+            <div class="field">
+              <label for="p-address">Address</label>
+              <input type="text" id="p-address" name="address">
+            </div>
+            <div class="row2">
+              <div class="field">
+                <label for="p-licenceNo">Drug licence number</label>
+                <input type="text" id="p-licenceNo" name="licenceNo">
+              </div>
+              <div class="field">
+                <label for="p-pharmacist">Usual dispensing pharmacist <span class="hint">pre-fills the entry form</span></label>
+                <input type="text" id="p-pharmacist" name="pharmacist">
+              </div>
+            </div>
+            <p id="pharmacy-msg" class="formmsg" role="status" aria-live="polite"></p>
+            <div class="btnrow">
+              <button type="submit" class="btn primary">Save</button>
+            </div>
+          </form>
+        </section>
+
+        <section class="card">
+          <h2>Schedule H1 molecule list</h2>
+          <div class="note">
+            This list is a data-entry aid, not the Schedule. Schedule H1 is amended by notification, so molecules are added to it over time and any list goes stale. Keep yours current against the Schedule as notified, and check the pack. A warning here is a prompt to look, never a ruling; no warning does not make a drug non-H1.
+          </div>
+          <p class="help"><span id="molecule-count" class="mono">0</span> molecules in your list. <span id="molecule-source"></span></p>
+          <form id="molecule-form" autocomplete="off">
+            <div class="field">
+              <label for="m-add">Add a molecule</label>
+              <input type="text" id="m-add" name="add" placeholder="bedaquiline">
+            </div>
+            <div class="btnrow">
+              <button type="submit" class="btn primary">Add</button>
+              <button type="button" class="btn ghost" id="molecule-reset">Restore the supplied list</button>
+            </div>
+          </form>
+          <p id="molecule-msg" class="formmsg" role="status" aria-live="polite"></p>
+          <ul class="chips" id="molecule-list"></ul>
+        </section>
+      </div>
+    </div>
+
+    <div class="wrap noprint">
+      <section class="card">
+        <h2>What this tool does and does not do</h2>
+        <div class="prose">
+          <p>It records and prints the Schedule H1 sale register. It <strong>does not transmit anything to any authority</strong>, has no connection to any drug-control portal, and is <strong>not a substitute for the bound physical register</strong> where one is required: a bound, serially paginated register is what an inspector asks to see, and many state drug-control authorities expect it. Use this to keep the data straight, to find an entry quickly and to print clean pages — not to replace the book.</p>
+          <p>The register holds patient names and addresses. The data file is created readable only by your user account; back it up the way you would back up any patient record, and keep it for at least the retention period.</p>
+          <details class="assumptions">
+            <summary>Figures this tool uses</summary>
+            <p><strong>Retention period: 3 years</strong> from the date of supply, under the Schedule H1 condition read with Rule 65(11A) of the Drugs and Cosmetics Rules, 1945. Three calendar years, not 1,095 days. A supply on 29 February is retained until 28 February three years later; hold it to 1 March if you would rather keep a day in hand.</p>
+            <p><strong>Column set:</strong> the Schedule H1 condition itself names the prescriber, the patient, the drug and the quantity. The batch number, manufacturer, prescriber's registration number and dispensing pharmacist are included because inspection formats in practice ask for them. All eleven are required here.</p>
+            <p>Confirm the current Schedule H1 list and the register format with your State Drugs Controller or on the CDSCO website before relying on either.</p>
+          </details>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer class="foot noprint">
+    <div class="wrap">
+      <span>Open MSME · free tools for small businesses · MIT licensed</span>
+      <a href="https://sreenivas-sadhu-prabhakara.github.io/openmsme/">All tools</a>
+    </div>
+  </footer>
+
+  <script src="assets/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'self'; img-src 'self' data:; style-src 'self'; script-src 'self'; font-src 'self'; form-action 'self'">
+  <title>Schedule H1 drug sale register for retail pharmacies · Open MSME</title>
+  <meta name="description" content="A free, offline single-binary tool that keeps the separate Schedule H1 sale register: the full statutory column set, unbroken serial numbers, three-year retention status and a printable register for inspection.">
+  <meta name="color-scheme" content="light dark">
+  <meta property="og:title" content="Schedule H1 drug sale register for retail pharmacies · Open MSME">
+  <meta property="og:description" content="Record every Schedule H1 supply with the full statutory field set, check serial continuity, see three-year retention per entry and print the register for an inspector. Runs on your own machine.">
+  <meta property="og:type" content="website">
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="assets/style.css">
+  <link rel="stylesheet" href="assets/accent.css">
+  <script src="assets/theme-init.js"></script>
+</head>
+<body>
+  <header class="topbar">
+    <div class="wrap">
+      <a class="brand" href="https://sreenivas-sadhu-prabhakara.github.io/openmsme/">
+        <span class="dot"></span><b>Open MSME</b><span class="tag">Schedule H1 register</span>
+      </a>
+      <span class="sp"></span>
+      <a class="home" href="https://sreenivas-sadhu-prabhakara.github.io/openmsme/">All tools</a>
+      <button class="themer" data-themer type="button">Theme</button>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="wrap">
+        <div class="eyebrow">Healthcare SMEs · India</div>
+        <h1>Schedule H1 drug sale register for retail pharmacies</h1>
+        <p class="lede">A free, offline tool that keeps the separate register of Schedule H1 supplies: the full statutory column set, serial numbers that cannot silently break, three-year retention worked out for every line, and clean pages to print for an inspector.</p>
+        <div class="who">
+          <span class="pill">Retail chemists and hospital pharmacies</span>
+          <span class="pill">India</span>
+          <span class="pill reg">Drugs &amp; Cosmetics Rules · Schedule H1 · Rule 65(11A)</span>
+        </div>
+      </div>
+    </section>
+
+    <div class="wrap">
+      <div class="prose">
+
+        <h2>What it does</h2>
+        <p>Schedule H1 drugs may be supplied only against a prescription, and the pharmacy has to write each supply into a <strong>separate register</strong> with a prescribed set of columns, keep it for three years, and produce it on inspection. This tool is that register, kept on your own computer.</p>
+        <p>It takes one line at a time through a guided form that will not accept a half-filled entry: submit a line with the batch number missing and it comes back naming the batch number, not a generic complaint. It gives each line the next serial number, and it audits the whole run for gaps and reuse every time you open it — because a register that skips serial 47, or uses it twice, cannot show that nothing went out off the book. It works out the retention date for each line as three calendar years from the date of supply, and tells you which lines you must still hold and which you may destroy. And it prints the register in the statutory column order, paginated, with your licence details at the head of each page.</p>
+        <p>While you type a drug name it checks the name against a list of Schedule H1 molecules and warns you when it looks like one — a prompt to check the pack and the prescription before you dispense, not a verdict.</p>
+
+        <h2>Who it's for</h2>
+        <p>Retail chemists and hospital pharmacies in India that dispense Schedule H1 drugs: the anti-TB drugs, the fluoroquinolones and third-generation cephalosporins, the carbapenems and the habit-forming molecules. It is built for the single-counter pharmacy that keeps its register by hand and wants the arithmetic and the completeness check done for it — and for the pharmacist who has to find one entry from eight months ago while an inspector waits.</p>
+
+        <h2>The rule it implements</h2>
+        <p>The condition attached to <strong>Schedule H1</strong> of the <strong>Drugs and Cosmetics Rules, 1945</strong>, read with <strong>Rule 65(11A)</strong>, requires that the supply of a drug specified in Schedule H1 be made only against the prescription of a registered medical practitioner, and that it be <strong>recorded in a separate register at the time of supply</strong>, giving the prescriber, the patient, the drug and the quantity supplied. The record must be <strong>retained for three years and be open to inspection</strong>. Schedule H1 drugs also carry the warning label and the red border on the pack, and the prescription itself is to be retained.</p>
+        <p>The columns this tool requires are: serial number, date of supply, name of the drug, manufacturer, batch number, quantity supplied, name of the prescriber, registration number of the prescriber, name of the patient, address of the patient and name of the dispensing pharmacist. The Rule's own wording names the prescriber, the patient, the drug and the quantity; the batch number, the manufacturer, the prescriber's registration number and the dispensing pharmacist are included because inspection formats in practice ask for them and a register without them is hard to defend. All eleven are treated as mandatory here.</p>
+        <p>The retention period is held as a single named constant in the code, <code>RetentionYears = 3</code>, so if it is ever amended there is one line to change.</p>
+
+        <h2>Install &amp; run</h2>
+        <p>One binary, no dependencies, no installer, nothing to configure. With Go installed:</p>
+        <pre><code>git clone https://github.com/sreenivas-sadhu-prabhakara/schedule-h1-sale-register
+cd schedule-h1-sale-register
+
+# run it straight away
+go run .
+
+# or build the binary once and keep it
+go build -o schedule-h1-sale-register .
+./schedule-h1-sale-register</code></pre>
+        <p>Then open <code>http://127.0.0.1:8080/</code> in a browser. Two flags change the defaults:</p>
+        <pre><code>./schedule-h1-sale-register -addr 127.0.0.1:9000 \
+    -data /Users/pharmacy/records/h1-register.json</code></pre>
+        <p>It listens on the loopback address only, so nothing on your network can reach it. Run it on the counter machine that keeps the register.</p>
+
+        <h2>What it stores</h2>
+        <p>One JSON file on the same machine — <code>./schedule-h1-sale-register-data.json</code> unless you point <code>-data</code> somewhere else. It holds your pharmacy details, your Schedule H1 molecule list and every register entry. The file is written atomically, to a temporary file that is then renamed over the old one, so an interrupted write cannot leave you with half a register.</p>
+        <p>Nothing leaves the machine. The program makes no outbound network calls of any kind: there is no telemetry, no analytics, no update check, no font or script loaded from anywhere else, and no connection to any drug-control portal. The register holds patient names and addresses, so the data file is created readable only by your own user account. Back it up as you would back up any patient record, and keep the backups for at least the retention period.</p>
+
+        <h2>Features</h2>
+        <div class="featgrid">
+          <div class="feat">
+            <h3>Guided entry that cannot be half-filled</h3>
+            <p>Every statutory column is required. A refused entry names each column still blank and marks the inputs, instead of failing on the first one it finds.</p>
+          </div>
+          <div class="feat">
+            <h3>Serial continuity audit</h3>
+            <p>A banner on every screen reports the serial run. Gaps and reused numbers are named outright as an inspection failure — the tool will not quietly renumber them away.</p>
+          </div>
+          <div class="feat">
+            <h3>Schedule H1 warning while you type</h3>
+            <p>The drug name is matched against your molecule list as you enter it, including inside brand and combination names, and the molecules it matched are shown.</p>
+          </div>
+          <div class="feat">
+            <h3>Three-year retention per line</h3>
+            <p>Calendar-correct retention dates, leap years included, with a must-retain or may-destroy status and the days remaining for each entry.</p>
+          </div>
+          <div class="feat">
+            <h3>Printable bound-register view</h3>
+            <p>The statutory column order, broken into pages with your pharmacy name and licence number at the head of each, ready to hand over.</p>
+          </div>
+          <div class="feat">
+            <h3>Date-range print and CSV export</h3>
+            <p>Filter by drug, batch, patient, prescriber or date range, then print just that period for an inspector or export it as CSV.</p>
+          </div>
+          <div class="feat">
+            <h3>An H1 list you keep current</h3>
+            <p>The supplied molecule list is a starting point you can add to and prune. Your edits are saved with the register and the tool says when the list has been changed.</p>
+          </div>
+          <div class="feat">
+            <h3>Yours, offline, forever</h3>
+            <p>A single binary and one JSON file. No account, no subscription, no internet connection, no lock-in. MIT licensed.</p>
+          </div>
+        </div>
+
+        <h2>Honest limits</h2>
+        <div class="note">
+          <p><strong>This tool records and prints the register. It does not transmit anything to any authority</strong> — there is no filing, no submission and no connection to any drug-control system — <strong>and it is not a substitute for the bound physical register where one is required.</strong> A bound, serially paginated register is what an inspector asks to see, and state drug-control authorities commonly expect it. Use this to keep the data straight, find entries quickly and print clean pages; keep the book as well.</p>
+          <p><strong>The supplied Schedule H1 molecule list is not authoritative and not complete.</strong> Schedule H1 is amended by notification, so molecules are added to it over time and any fixed list goes stale. The list shipped here is a data-entry aid: a warning is a prompt to check the pack and the Schedule, and the absence of a warning does not make a drug non-H1. Keep your own list current against Schedule H1 as notified by the Ministry of Health and Family Welfare, and confirm the current Schedule, the register format and the retention period with your State Drugs Controller or on the CDSCO website before relying on them.</p>
+          <p>This is not legal or regulatory advice. The responsibility for the register, for what is dispensed and for the pharmacist's presence at the counter remains with the licensee.</p>
+        </div>
+
+      </div>
+    </div>
+  </main>
+
+  <footer class="foot">
+    <div class="wrap">
+      <span>Open MSME · free tools for small businesses · MIT licensed</span>
+      <a href="https://sreenivas-sadhu-prabhakara.github.io/openmsme/">All tools</a>
+    </div>
+  </footer>
+
+  <script src="assets/ui.js"></script>
+</body>
+</html>
